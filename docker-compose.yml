@@ -3,20 +3,20 @@ networks:
     external: true
 
 services:
-  patinhas-lp:
-    image: ${DOCKERHUB_USERNAME}/patinhas-lp:latest
-    container_name: patinhas-lp
+  patinhas-app:
+    image: ${DOCKERHUB_USERNAME}/patinhas-app:latest
+    container_name: patinhas-app
     restart: unless-stopped
     networks:
       - traefik-network
     labels:
       - "traefik.enable=true"
       # HTTPS (principal) - com www e sem www
-      - "traefik.http.routers.patinhas-lp.rule=Host(`patinhas-na-rua.maiyu.com.br`) || Host(`www.patinhas-na-rua.maiyu.com.br`)"
-      - "traefik.http.routers.patinhas-lp.entrypoints=websecure"
-      - "traefik.http.routers.patinhas-lp.tls.certresolver=myresolver"
-      - "traefik.http.services.patinhas-lp.loadbalancer.server.port=3000"
+      - "traefik.http.routers.patinhas-app.rule=Host(`patinhas-na-rua.maiyu.com.br`) || Host(`www.patinhas-na-rua.maiyu.com.br`)"
+      - "traefik.http.routers.patinhas-app.entrypoints=websecure"
+      - "traefik.http.routers.patinhas-app.tls.certresolver=myresolver"
+      - "traefik.http.services.patinhas-app.loadbalancer.server.port=3000"
       # HTTP para HTTPS redirect - com www e sem www
-      - "traefik.http.routers.patinhas-lp-http.rule=Host(`patinhas-na-rua.maiyu.com.br`) || Host(`www.patinhas-na-rua.maiyu.com.br`)"
-      - "traefik.http.routers.patinhas-lp-http.entrypoints=web"
-      - "traefik.http.routers.patinhas-lp-http.middlewares=https-only@file"
+      - "traefik.http.routers.patinhas-app-http.rule=Host(`patinhas-na-rua.maiyu.com.br`) || Host(`www.patinhas-na-rua.maiyu.com.br`)"
+      - "traefik.http.routers.patinhas-app-http.entrypoints=web"
+      - "traefik.http.routers.patinhas-app-http.middlewares=https-only@file"
