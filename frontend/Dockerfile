@@ -1,9 +1,6 @@
 FROM node:22-alpine AS deps
 WORKDIR /app
 
-# Instalar curl para healthcheck
-RUN apk add --no-cache curl
-
 COPY package.json package-lock.json ./
 RUN npm install
 
@@ -20,6 +17,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV HOSTNAME="0.0.0.0"
 ENV PORT=3000
+
+# Instalar curl para healthcheck
+RUN apk add --no-cache curl
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
