@@ -1,0 +1,22 @@
+networks:
+  traefik-network:
+    external: true
+
+services:
+  patinhas-lp:
+    image: ${DOCKERHUB_USERNAME}/patinhas-lp:latest
+    container_name: patinhas-lp
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      # HTTPS (principal) - com www e sem www
+      - "traefik.http.routers.patinhas-lp.rule=Host(`patinhas-na-rua.maiyu.com.br`) || Host(`www.patinhas-na-rua.maiyu.com.br`)"
+      - "traefik.http.routers.patinhas-lp.entrypoints=websecure"
+      - "traefik.http.routers.patinhas-lp.tls.certresolver=myresolver"
+      - "traefik.http.services.patinhas-lp.loadbalancer.server.port=3000"
+      # HTTP para HTTPS redirect - com www e sem www
+      - "traefik.http.routers.patinhas-lp-http.rule=Host(`patinhas-na-rua.maiyu.com.br`) || Host(`www.patinhas-na-rua.maiyu.com.br`)"
+      - "traefik.http.routers.patinhas-lp-http.entrypoints=web"
+      - "traefik.http.routers.patinhas-lp-http.middlewares=https-only@file"
